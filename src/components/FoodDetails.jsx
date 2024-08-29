@@ -9,7 +9,7 @@ export default function FoodDetails({ foodId }) {
     const API_KEY = "15c6dc89ba1d4af49def1edb6b699117";
     useEffect(() => {
         async function fetchFood() {
-            // console.log("Fetching data for foodId:", foodId); // Проверка перед запросом
+            // // console.log("Fetching data for foodId:", foodId); // Проверка перед запросом
             const res = await fetch(`${URL}?apiKey=${API_KEY}`);
             const data = await res.json();
             console.log(data);
@@ -45,18 +45,35 @@ export default function FoodDetails({ foodId }) {
                 <div>
                     💲<span>{food.pricePerServing / 100} Per serving</span>
                 </div>
-            </div>
-            <div className={styles.recipeInstructions}>
+                <h2>Ingredients</h2>
+                {food.extendedIngredients &&
+                    food.extendedIngredients.map((item) => (
+                        <div>
+                            <img
+                                src={
+                                    `https://spoonacular.com/cdn/ingredients_100x100/` +
+                                    item.image
+                                }
+                                alt=""
+                            />
+                            <h3>{item.name}</h3>
+                            <h3>
+                                {item.amount} {item.unit}
+                            </h3>
+                        </div>
+                    ))}
                 <h2>Instructions </h2>
-                <ol>
-                    {isLoading ? (
-                        <p>Loading...</p>
-                    ) : (
-                        food.analyzedInstructions[0].steps.map((step) => (
-                            <li>{step.step}</li>
-                        ))
-                    )}
-                </ol>
+                <div className={styles.recipeInstructions}>
+                    <ol>
+                        {isLoading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            food.analyzedInstructions[0].steps.map((step) => (
+                                <li>{step.step}</li>
+                            ))
+                        )}
+                    </ol>
+                </div>
             </div>
         </div>
     );
